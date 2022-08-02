@@ -1,0 +1,9 @@
+main: zone.phi.bukkit.survival.Main
+name: PhiSurvival
+version: 1.0-SNAPSHOT
+api-version: 1.19
+author: Naptie
+commands:
+  arcaea:
+    description: Access to Arcaea stats, info courtesy of Arcaea Unlimited API.
+    aliases: [arc, aua, a]
