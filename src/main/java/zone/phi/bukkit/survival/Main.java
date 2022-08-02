@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,7 +18,9 @@ import zone.phi.bukkit.survival.utils.SkullManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -51,7 +54,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         this.logger.info("已禁用 " + getDescription().getName() + " v" + getDescription().getVersion());
-        saveConfigs();
+        saveConfigs(this.auaHelper.getBindings());
         Bukkit.getScheduler().cancelTasks(this);
         this.bar.removeAll();
         this.bar = null;
@@ -118,11 +121,16 @@ public class Main extends JavaPlugin {
 //        }, 0, 0);
 //    }
 
-    private void saveConfigs() {
+    private void saveConfigs(Map<UUID, Integer> bindings) {
         try {
-            this.auaConfig.save("aua.yml");
+            for (UUID key : bindings.keySet()) {
+                this.auaConfig.set("bindings." + key.toString(), bindings.get(key));
+            }
+            File file = new File(getDataFolder(), "aua.yml");
+            getLogger().info("正在保存至 " + file.getAbsolutePath());
+            this.auaConfig.save(file);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 

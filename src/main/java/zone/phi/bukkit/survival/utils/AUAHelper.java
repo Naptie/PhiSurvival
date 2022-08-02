@@ -110,6 +110,9 @@ public class AUAHelper {
     }
 
     public String getUserInfo(Player player, String recent) {
+        if (!bindings.containsKey(player.getUniqueId())) {
+            return "&c请先使用 /arcaea bind <用户名或好友代码> 绑定您的 Arcaea 账号！";
+        }
         Map<String, String> params = new HashMap<>();
         params.put("usercode", String.valueOf(bindings.get(player.getUniqueId())));
         params.put("recent", recent);
@@ -150,6 +153,9 @@ public class AUAHelper {
     }
 
     public String getBest30(Player player, String overflow) {
+        if (!bindings.containsKey(player.getUniqueId())) {
+            return "&c请先使用 /arcaea bind <用户名或好友代码> 绑定您的 Arcaea 账号！";
+        }
         Map<String, String> params = new HashMap<>();
         params.put("usercode", String.valueOf(bindings.get(player.getUniqueId())));
         params.put("overflow", overflow);
@@ -222,6 +228,9 @@ public class AUAHelper {
     }
 
     public String getBest(Player player, String song, String difficulty) {
+        if (!bindings.containsKey(player.getUniqueId())) {
+            return "&c请先使用 /arcaea bind <用户名或好友代码> 绑定您的 Arcaea 账号！";
+        }
         Map<String, String> params = new HashMap<>();
         params.put("usercode", String.valueOf(bindings.get(player.getUniqueId())));
         params.put("songname", song);
@@ -303,6 +312,10 @@ public class AUAHelper {
         int minutes = seconds / 60;
         seconds %= 60;
         return String.format("%s分%s秒", minutes, seconds);
+    }
+
+    public Map<UUID, Integer> getBindings() {
+        return this.bindings;
     }
 
     private record RequestHelper(String apiRoot, String token) {
