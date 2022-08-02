@@ -241,7 +241,7 @@ public class AUAHelper {
         if (status != 0) return "&c" + errors.get(status);
         JSONObject record = resp.getJSONObject("content").getJSONObject("record");
         JSONObject songInfo = resp.getJSONObject("content").getJSONArray("songinfo").getJSONObject(0);
-        return ChatUtils.HYPHEN + "\n&6&l谱面最高分&r\n" + (songInfo.getInteger("side") == 0 ? "\n \n&b&l" : "\n \n&d&l") + songInfo.getString("name_en") + " " + this.difficultyTags.get(record.getInteger("difficulty")) +
+        return ChatUtils.HYPHEN + "\n&6&l谱面最高分\n&r" + (songInfo.getInteger("side") == 0 ? "\n&b&l" : "\n&d&l") + songInfo.getString("name_en") + " " + this.difficultyTags.get(record.getInteger("difficulty")) +
                 "\n&a曲师&f：&e" + songInfo.getString("artist") +
                 "\n&a画师&f：&e" + songInfo.getString("jacket_designer") +
                 "\n&a谱师&f：&e" + songInfo.getString("chart_designer") +
