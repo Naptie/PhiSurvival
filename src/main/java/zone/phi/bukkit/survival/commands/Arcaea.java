@@ -1,5 +1,6 @@
 package zone.phi.bukkit.survival.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,9 +10,10 @@ import zone.phi.bukkit.survival.Main;
 import zone.phi.bukkit.survival.utils.AUAHelper;
 import zone.phi.bukkit.survival.utils.ChatUtils;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class Arcaea implements CommandExecutor {
 
@@ -50,41 +52,35 @@ public class Arcaea implements CommandExecutor {
             player.sendMessage(t("&c用法：/arcaea " + arg + " " + commands.get(arg)));
             return true;
         }
-        Thread thread = new Thread("Phizarc " + player.getName()) {
-            @Override
-            public void run() {
-                switch (strings[0].toLowerCase()) {
-                    case "bind" -> {
-                        player.sendMessage(t(auaHelper.bind(player, strings[1])));
-                    }
-                    case "unbind" -> player.sendMessage(t(auaHelper.unbind(player)));
-                    case "info" -> {
-                        String recent = strings.length > 1 ? strings[1] : "0";
-                        player.sendMessage(t(Objects.equals(recent, "0") ? "&a正在查询 &6Arcaea 账号信息&a，请稍候" : "&a正在查询 &6Arcaea 账号信息&a与&6最近" + recent + "条游玩记录&a，请稍候"));
-                        player.sendMessage(t(auaHelper.getUserInfo(player, recent)));
-                    }
-                    case "b30" -> {
-                        String overflow = strings.length > 1 ? strings[1] : "0";
-                        player.sendMessage(t(Objects.equals(overflow, "0") ? "&a正在查询 &6Best 30&a，请稍候" : "&a正在查询 &6Best 30&a 与 &6Overflow " + overflow + "&a，请稍候"));
-                        player.sendMessage(t(auaHelper.getBest30(player, overflow)));
-                    }
-                    case "best" -> {
-                        String song = strings[1], difficulty = strings.length > 2 ? strings[2] : "2";
-                        player.sendMessage(t("&a正在查询&6谱面最高分&a，请稍候"));
-                        player.sendMessage(t(auaHelper.getBest(player, song, difficulty)));
-                    }
-                    case "song" -> {
-                        player.sendMessage(t("&a正在获取&6曲目详情&a，请稍候"));
-                        player.sendMessage(t(auaHelper.getSongInfo(strings[1])));
-                    }
-                    case "random" -> {
-                        player.sendMessage(t("&a正在获取&6随机谱面&a，请稍候"));
-                        player.sendMessage(t(auaHelper.random(strings.length > 1 ? parseDifficulty(strings[1]) : 0, strings.length > 2 ? parseDifficulty(strings[2]) : 24)));
-                    }
+        Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+            switch (strings[0].toLowerCase()) {
+                case "bind" -> player.sendMessage(t(auaHelper.bind(player, strings[1])));
+                case "unbind" -> player.sendMessage(t(auaHelper.unbind(player)));
+                case "info" -> {
+                    String recent = strings.length > 1 ? strings[1] : "0";
+                    player.sendMessage(t(Objects.equals(recent, "0") ? "&a正在查询 &6Arcaea 账号信息&a，请稍候" : "&a正在查询 &6Arcaea 账号信息&a与&6最近" + recent + "条游玩记录&a，请稍候"));
+                    player.sendMessage(t(auaHelper.getUserInfo(player, recent)));
+                }
+                case "b30" -> {
+                    String overflow = strings.length > 1 ? strings[1] : "0";
+                    player.sendMessage(t(Objects.equals(overflow, "0") ? "&a正在查询 &6Best 30&a，请稍候" : "&a正在查询 &6Best 30&a 与 &6Overflow " + overflow + "&a，请稍候"));
+                    player.sendMessage(t(auaHelper.getBest30(player, overflow)));
+                }
+                case "best" -> {
+                    String song = strings[1], difficulty = strings.length > 2 ? strings[2] : "2";
+                    player.sendMessage(t("&a正在查询&6谱面最高分&a，请稍候"));
+                    player.sendMessage(t(auaHelper.getBest(player, song, difficulty)));
+                }
+                case "song" -> {
+                    player.sendMessage(t("&a正在获取&6曲目详情&a，请稍候"));
+                    player.sendMessage(t(auaHelper.getSongInfo(strings[1])));
+                }
+                case "random" -> {
+                    player.sendMessage(t("&a正在获取&6随机谱面&a，请稍候"));
+                    player.sendMessage(t(auaHelper.random(strings.length > 1 ? parseDifficulty(strings[1]) : 0, strings.length > 2 ? parseDifficulty(strings[2]) : 24)));
                 }
             }
-        };
-        thread.start();
+        });
         return true;
     }
 
